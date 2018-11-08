@@ -13,6 +13,9 @@
                     :href="'#' + key"
                     :key="nav.index"
                     class="nav-link">{{ nav }}</a>
+                <button
+                    class="locale-btn nav-link"
+                    @click="toggleLocale">{{ locale }}</button>
             </scrollactive>
             <nav
                 v-if="$route.name === 'imprint' || $route.name === 'privacy'"
@@ -26,6 +29,9 @@
                     :class="{'is-active': $route.name === 'imprint'}"
                     to="/imprint"
                     class="nav-link">{{ $t('footer.legal.imprint') }}</router-link>
+                <button
+                    class="locale-btn nav-link"
+                    @click="toggleLocale">{{ locale }}</button>
             </nav>
             <the-logo/>
         </div>
@@ -41,7 +47,25 @@ export default {
   },
   data: () => ({
     open: false
-  })
+  }),
+  computed: {
+    locale() {
+      if (this.$i18n.locale === 'de') {
+        return 'English'
+      } else {
+        return 'Deutsch'
+      }
+    }
+  },
+  methods: {
+    toggleLocale() {
+      if (this.$i18n.locale === 'de') {
+        this.$i18n.locale = 'en'
+      } else {
+        this.$i18n.locale = 'de'
+      }
+    }
+  }
 }
 </script>
 
@@ -79,9 +103,8 @@ export default {
     display: flex
     width: 100%
 
-  .nav-link
+  .nav-link, .locale-btn
     margin-right: 5%
-    padding-right: .5em
     color: $color-black
     font-size: .9em
     letter-spacing: .5px
@@ -90,6 +113,14 @@ export default {
     transition: transform .3s ease-in
     border-bottom: 1px solid $color-white
     transition: all .3s ease-in
+
+  .locale-btn
+    cursor: pointer
+    color: $color-black
+    font-size: .83em
+    &:active
+      font-weight: 600
+      color: $color-primary
 
   .is-active
     color: $color-primary
